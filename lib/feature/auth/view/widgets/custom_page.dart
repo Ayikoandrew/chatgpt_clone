@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 
 class CustomPage extends StatelessWidget {
   final TextEditingController? controller;
-  final String? hintText;
+
   final bool obscureText;
+  final String? labelText;
+  final Widget icon;
   const CustomPage({
     super.key,
     required this.controller,
-    required this.hintText,
     this.obscureText = false,
+    required this.labelText,
+    required this.icon,
   });
 
   @override
@@ -17,11 +20,12 @@ class CustomPage extends StatelessWidget {
       obscureText: obscureText,
       controller: controller,
       decoration: InputDecoration(
-        hintText: hintText,
+        labelText: labelText,
+        prefixIcon: icon,
       ),
       validator: (value) {
         if (value!.trim().isEmpty) {
-          return '$hintText can not be empty';
+          return '$labelText can not be empty';
         }
         return null;
       },

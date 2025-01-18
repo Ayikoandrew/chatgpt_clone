@@ -1,8 +1,10 @@
 import 'package:chatgpt_clone/core/theme/app_pallete.dart';
+import 'package:chatgpt_clone/feature/auth/repositories/auth_remote_repository.dart';
 import 'package:chatgpt_clone/feature/auth/view/pages/signup_page.dart';
 import 'package:chatgpt_clone/feature/auth/view/widgets/auth_button.dart';
 import 'package:chatgpt_clone/feature/auth/view/widgets/custom_page.dart';
 import 'package:flutter/material.dart';
+import 'package:fpdart/fpdart.dart';
 
 class LoginPage extends StatefulWidget {
   static route() {
@@ -48,14 +50,36 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                CustomPage(controller: emailController, hintText: 'Email'),
+                CustomPage(
+                  controller: emailController,
+                  labelText: 'Email',
+                  icon: Icon(Icons.email),
+                ),
                 const SizedBox(height: 20),
                 CustomPage(
-                    controller: passwordController,
-                    hintText: 'Password',
-                    obscureText: true),
+                  controller: passwordController,
+                  obscureText: true,
+                  labelText: 'Password',
+                  icon: Icon(Icons.password),
+                ),
                 const SizedBox(height: 20),
-                AuthButton(onTap: () {}, data: 'Login'),
+                AuthButton(
+                    onTap: () async {
+                      if (formKey.currentState!.validate()) {
+                        final res = await AuthRemoteRepository().login(
+                          email: emailController.text,
+                          password: passwordController.text,
+                        );
+
+                        final val = switch (res) {
+                          Left(value: final l) => l,
+                          Right(value: final r) => r
+                        };
+
+                        print(val);
+                      }
+                    },
+                    data: 'Login'),
                 const SizedBox(height: 10),
                 GestureDetector(
                   onTap: () {
